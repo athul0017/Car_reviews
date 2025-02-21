@@ -34,6 +34,7 @@ class Car(models.Model):
     torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")  # Added help_text
     pros = models.TextField()
     cons = models.TextField()
+    image_url = models.URLField(max_length=200, help_text="URL of the car image")  # Added image URL field
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.year})"  # Updated to include year
@@ -44,13 +45,14 @@ class Car(models.Model):
         
 
 
- 
 
-# class Reviews(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE) 
-#     car = models.ForeignKey('Car', on_delete=models.CASCADE)  
-#     rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])  
-#     review_text = models.TextField()  
+# class Review(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+#     title = models.CharField(max_length=255)
+#     content = models.TextField()
 #     created_at = models.DateTimeField(auto_now_add=True)
 
+#     def __str__(self):
+#         return f"Review by {self.user.username} on {self.car.name}"
 
