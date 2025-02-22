@@ -1,58 +1,54 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class Car(models.Model):
-    BRAND_CHOICES = (
-        ('Toyota', 'Toyota'),
-        ('Honda', 'Honda'),
-        ('Ford', 'Ford'),
-        ('Suzuki', 'Suzuki'),
-        ('Hyundai', 'Hyundai'),
-        ('Skoda', 'Skoda'),
-        ('BMW', 'BMW'),
-        # Add more brands as needed
-    )
-
-    MODEL_CHOICES = (
-        ('Corolla', 'Corolla'),
-        ('Civic', 'Civic'),
-        ('Mustang', 'Mustang'),
-        ('Celerio', 'Celerio'),
-        ('i20', '120'),
-        ('Kylaq', 'Kylaq'),
-        ('3 Series', '3 Series'),
-        # Add more models as needed
-    )
-
-    brand = models.CharField(max_length=30, choices=BRAND_CHOICES)
-    model = models.CharField(max_length=30, choices=MODEL_CHOICES)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-    engine_type = models.CharField(max_length=20)
-    transmission = models.CharField(max_length=20)
-    mileage = models.DecimalField(max_digits=10, decimal_places=2, help_text="in km/l")  # Added help_text
-    horse_power = models.DecimalField(max_digits=10, decimal_places=2, help_text="in HP")  # Added help_text
-    torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")  # Added help_text
-    pros = models.TextField()
-    cons = models.TextField()
-    image_url = models.URLField(max_length=200, help_text="URL of the car image")  # Added image URL field
+# Brand Model (e.g., Maruti Suzuki, Toyota, Ford)
+class Brand(models.Model):
+    bname = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return f"{self.brand} {self.model} ({self.year})"  # Updated to include year
+        return self.bname
+
+# Car Model Table (e.g., Swift, Celerio, Fortuner)
+class CarModel(models.Model):
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name="models")
+    model_name = models.CharField(max_length=50)
+    year = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.brand.bname} {self.model_name} ({self.year})"
+
+# Car Table (Actual cars available for sale)
+class Car(models.Model):
+    car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name="cars", null=True, blank=False)  # Linked to CarModel
+    variant = models.CharField(max_length=50, help_text="e.g., VXI, ZXI, ZXI+", null=True, blank=False)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    # rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)
+    engine_type = models.CharField(max_length=20)
+    transmission = models.CharField(max_length=20, choices=[("Manual", "Manual"), ("Automatic", "Automatic")])
+    mileage = models.DecimalField(max_digits=10, decimal_places=2, help_text="in km/l")
+    horse_power = models.DecimalField(max_digits=10, decimal_places=2, help_text="in HP")
+    torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")
+    pros = models.TextField(null=True, blank=True)
+    cons = models.TextField(null=True, blank=True)
+    image_url = models.URLField(max_length=200, help_text="URL of the car image", null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.car_model.brand.bname} {self.car_model.model_name} {self.variant} ({self.car_model.year})"
 
     class Meta:
-        ordering = ['brand', 'model']
+        ordering = ['car_model', 'variant']
         verbose_name_plural = "Cars"
-        
 
 
+class Review(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="reviews")  # Each review is linked to a Car
+    user = models.ForeignKey(User, max_length=100,on_delete=models.CASCADE )  # Name of the reviewer
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)  # Rating from 1-5
+    review_text = models.TextField(help_text="Write your review here")  # Review content
+    created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when review is created
 
-# class Review(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-#     title = models.CharField(max_length=255)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.user.username} - {self.car.car_model.model_name} ({self.rating}⭐)"
 
-#     def __str__(self):
-#         return f"Review by {self.user.username} on {self.car.name}"
-
+    class Meta:
+        ordering = ['-created_at']  # Latest reviews first        
