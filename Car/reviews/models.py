@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 # Brand Model (e.g., Maruti Suzuki, Toyota, Ford)
 class Brand(models.Model):
@@ -22,6 +23,7 @@ class Car(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name="cars", null=True, blank=False)  # Linked to CarModel
     variant = models.CharField(max_length=50, help_text="e.g., VXI, ZXI, ZXI+", null=True, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.CharField(max_length=50, help_text="e.g., SUV, Sedan, Hatchback", null=True, blank=False)
     # rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)
     engine_type = models.CharField(max_length=20)
     transmission = models.CharField(max_length=20, choices=[("Manual", "Manual"), ("Automatic", "Automatic")])
@@ -31,9 +33,15 @@ class Car(models.Model):
     pros = models.TextField(null=True, blank=True)
     cons = models.TextField(null=True, blank=True)
     image_url = models.URLField(max_length=200, help_text="URL of the car image", null=True, blank=True)
+    created_at = models.DateTimeField(default=now, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
+   
 
     def __str__(self):
         return f"{self.car_model.brand.bname} {self.car_model.model_name} {self.variant} ({self.car_model.year})"
+    
+    
+    
 
     class Meta:
         ordering = ['car_model', 'variant']
