@@ -39,6 +39,10 @@ class Car(models.Model):
     created_at = models.DateTimeField(default=now, editable=False)
     updated_at = models.DateTimeField(auto_now_add=True)
     featured = models.BooleanField(default=False, help_text="Mark as featured car")
+
+    @property
+    def price_in_lakhs(self):
+        return round(self.price / 100000, 2)
    
 
     def __str__(self):
@@ -54,7 +58,7 @@ class Car(models.Model):
 
 class Review(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="reviews")  # Each review is linked to a Car
-    user = models.ForeignKey(User, max_length=100,on_delete=models.CASCADE )  # Name of the reviewer
+    user = models.OneToOneField(User, max_length=100,on_delete=models.CASCADE )  # Name of the reviewer
     rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)  # Rating from 1-5
     review_text = models.TextField(help_text="Write your review here")  # Review content
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when review is created

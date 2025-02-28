@@ -232,7 +232,7 @@
 		</section><!--/.welcome-hero-->
 		<!--welcome-hero end -->
 
-		 <!-- service start --> -->
+		 <!-- service start --> --
 	 <!-- <section id="service" class="service"> -->
 			<!-- <div class="container">
 				<div class="service-content">
@@ -272,7 +272,7 @@
 						</div>
 					</div>
 				</div>
-			</div><!--/.container-->
+			</div><!/.container-->
 
 		<!-- </section>/.service -->
 		<!-- service end --> 
@@ -305,7 +305,7 @@
 											<p>{{ car.discription|truncatewords:30 }}</p>
 											<p class="new-cars-para2">
 												Engine: {{ car.engine_type }} | Transmission: {{ car.transmission }}<br>
-												Mileage: {{ car.mileage }} km/l | Price: ₹{{ car.price }}
+												Mileage: {{ car.mileage }} km/l | Price: ₹{{ car.price_in_lakhs }} lakh
 											</p>
 											<button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
 												View Details
@@ -359,7 +359,7 @@
                         </div>
                         <div class="featured-cars-txt">
                             <h2><a href="#">{{ car.car_model }}</a></h2>
-                            <h3>₹{{ car.price }} Lakh</h3>
+                            <h3>₹{{ car.price_in_lakhs }} Lakh</h3>
                             <p>{{ car.discription|truncatewords:20 }}</p>
                         </div>
                     </div>
