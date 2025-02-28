@@ -18,11 +18,13 @@ class CarModel(models.Model):
     def __str__(self):
         return f"{self.brand.bname} {self.model_name} ({self.year})"
 
-# Car Table (Actual cars available for sale)
+# Car Table
+
 class Car(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name="cars", null=True, blank=False)  # Linked to CarModel
     variant = models.CharField(max_length=50, help_text="e.g., VXI, ZXI, ZXI+", null=True, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    discription = models.TextField(null=True, blank=False)
     category = models.CharField(max_length=50, help_text="e.g., SUV, Sedan, Hatchback", null=True, blank=False)
     # rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)
     engine_type = models.CharField(max_length=20)
@@ -32,9 +34,10 @@ class Car(models.Model):
     torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")
     pros = models.TextField(null=True, blank=True)
     cons = models.TextField(null=True, blank=True)
-    image_url = models.URLField(max_length=200, help_text="URL of the car image", null=True, blank=True)
+    image_file = models.ImageField(upload_to='car_images/', help_text="Upload an image of the car", null=True, blank=True)
     created_at = models.DateTimeField(default=now, editable=False)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    featured = models.BooleanField(default=False, help_text="Mark as featured car")
    
 
     def __str__(self):
@@ -45,7 +48,7 @@ class Car(models.Model):
 
     class Meta:
         ordering = ['car_model', 'variant']
-        verbose_name_plural = "Cars"
+        verbose_name_plural = "Car"
 
 
 class Review(models.Model):

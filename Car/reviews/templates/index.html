@@ -279,311 +279,99 @@
 
 		
 		
-		<!--new-cars start -->
+		<!-- new-cars start --> 
+		<!--/.container -->
 		<section id="new-cars" class="new-cars">
 			<div class="container">
 				<div class="section-header">
-					<p>checkout <span>the</span> latest cars</p>
-					<h2>newest cars</h2>
+					<p>Checkout <span>the</span> latest cars</p>
+					<h2>Newest Cars</h2>
 				</div><!--/.section-header-->
+		
 				<div class="new-cars-content">
 					<div class="owl-carousel owl-theme" id="new-cars-carousel">
+						{% for car in latest_cars %}
 						<div class="new-cars-item">
 							<div class="single-new-cars-item">
 								<div class="row">
 									<div class="col-md-7 col-sm-12">
 										<div class="new-cars-img">
-											<img src="{% static 'assets/images/new-cars-model/ncm11.png' %}" alt="img"/>
+											<img src="{{ car.image_file.url}}" alt="{{ car.car_model }}" />
 										</div><!--/.new-cars-img-->
 									</div>
 									<div class="col-md-5 col-sm-12">
 										<div class="new-cars-txt">
-											<h2><a href="#"> Kia Syros</a></h2>
-											<p>
-												The Kia Syros is a subcompact SUV with a bold, boxy design inspired by the EV9. It features a 30-inch panoramic display and Level 2 ADAS with 16 autonomous safety features. Built on the reinforced K1 platform, it ensures durability and stability.
-											</p>
+											<h2><a href="#">{{ car.car_model }} - {{ car.variant }}</a></h2>
+											<p>{{ car.discription|truncatewords:30 }}</p>
 											<p class="new-cars-para2">
-												It offers premium comfort with first-in-segment sliding, reclining, and ventilated rear seats. Available in multiple variants with petrol and diesel options, the Syros blends style, technology, and practicality.
+												Engine: {{ car.engine_type }} | Transmission: {{ car.transmission }}<br>
+												Mileage: {{ car.mileage }} km/l | Price: ₹{{ car.price }}
 											</p>
 											<button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-												view details
+												View Details
 											</button>
-										</div><!--/.new-cars-txt-->	
+										</div><!--/.new-cars-txt-->    
 									</div><!--/.col-->
 								</div><!--/.row-->
 							</div><!--/.single-new-cars-item-->
 						</div><!--/.new-cars-item-->
-
-						<div class="new-cars-item">
-							<div class="single-new-cars-item">
-								<div class="row">
-									<div class="col-md-7 col-sm-12">
-										<div class="new-cars-img">
-											<img src="{% static 'assets/images/new-cars-model/ncm222.png' %}" alt="img"/>
-										</div><!--/.new-cars-img-->
-									</div>
-									<div class="col-md-5 col-sm-12">
-										<div class="new-cars-txt">
-											<h2><a href="#">Mahindra BE.06</a></h2>
-											<p>
-												The Mahindra BE.06 is an all-electric SUV built on Mahindra’s advanced INGLO platform.
-												With a futuristic design and sustainable technology, it aims to redefine electric mobility.
-
-											</p>
-											<p class="new-cars-para2">
-												Experience the next generation of SUVs with an impressive range, high-performance motor, and cutting-edge safety features.
-											</p>
-											<button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-												view details
-											</button>
-										</div><!--/.new-cars-txt-->	
-									</div><!--/.col-->
-								</div><!--/.row-->	
-							</div><!--/.single-new-cars-item-->
-						</div><!--/.new-cars-item-->
-						<div class="new-cars-item">
-							<div class="single-new-cars-item">
-								<div class="row">
-									<div class="col-md-7 col-sm-12">
-										<div class="new-cars-img">
-											<img src=" {% static 'assets/images/new-cars-model/ncm33.png' %}" alt="img"/>
-										</div><!--/.new-cars-img-->
-									</div>
-									<div class="col-md-5 col-sm-12">
-										<div class="new-cars-txt">
-											<h2><a href="#"> e VITARA</a></h2>
-											<p>
-												The e Vitara is a modern and eco-friendly electric vehicle designed for efficiency and performance. It retains a bold and rugged design while offering advanced technology for a smooth driving experience. 
-											</p>
-											<p class="new-cars-para2">
-												With a spacious interior and smart connectivity features, it ensures comfort and convenience. Whether for city commutes or weekend adventures, it combines practicality with sustainability.
-											</p>
-											<button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
-												view details
-											</button>
-										</div><!--/.new-cars-txt-->	
-									</div><!--/.col-->
-								</div><!--/.row-->
-							</div><!--/.single-new-cars-item-->
-						</div><!--/.new-cars-item-->
+						{% empty %}
+						<p>No new cars available.</p>
+						{% endfor %}
 					</div><!--/#new-cars-carousel-->
 				</div><!--/.new-cars-content-->
 			</div><!--/.container-->
-
 		</section><!--/.new-cars-->
-		<!--new-cars end -->
+		
+
+		
 
 		<!--featured-cars start -->
-		<section id="featured-cars" class="featured-cars">
-			<div class="container">
-				<div class="section-header">
-					<p>checkout <span>the</span> featured cars</p>
-					<h2>featured cars</h2>
-				</div><!--/.section-header-->
-				<div class="featured-cars-content">
-					<div class="row">
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc111.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Petrol: ~18-20 kmpl
-										
-											<span class="featured-mi-span"> Level-2 ADAS </span> 
-											<span class="featured-hp-span">  7 Airbags </span>
-											 automatic/Manual
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Mahindra XUV 3XO</a></h2>
-									<h3>₹9.44 Lakh - ₹15.75 Lakh </h3>
-									<p>
-										A powerful, stylish, and comfortable SUV with advanced features, spacious design, and excellent safety for a smooth driving experience.
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc22.png' %}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage: 21.79 kmpl
+		{% load static %}
 
-											<span class="featured-mi-span">Smart Hybrid</span> 
-											<span class="featured-hp-span">Head-Up Display</span>
-											 automatic/Manual
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Maruti Suzuki Fronx </a></h2>
-									<h3>₹8.89 Lakh - ₹15.64 Lakh</h3>
-									<p>
-										A stylish crossover with advanced features, powerful performance, and modern connectivity
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc33.png' %}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage: 20.53 kmpl
-											<span class="featured-mi-span"> 405L Boot Space</span> 
-											<span class="featured-hp-span">1.0L Turbo engine</span>
-											 automatic/Manual
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Renault Kiger</a></h2>
-									<h3>₹7.06 Lakh - ₹13.48 Lakh</h3>
-									<p>
-										A stylish SUV with a powerful engine, modern features, and great efficiency.
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc444.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Range:230 Km
-											<span class="featured-mi-span">  Smart Connectivity</span> 
-											<span class="featured-hp-span"> Compact & Futuristic Design</span>
-											 automatic
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">MG Comet EV</a></h2>
-									<h3>₹7.39 Lakh - ₹10.16 Lakh</h3>
-									<p>
-										A compact and stylish EV with smart features, a 230 km range, and a futuristic design for effortless city driving.
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc66.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage:  15.2 km/l
-											<span class="featured-mi-span"> Panoramic Sunroof</span> 
-											<span class="featured-hp-span"> Bigger Alloy Wheels </span>
-											 automatic/Manual
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Thar ROXX</a></h2>
-									<h3>₹15.51 Lakh - ₹29.72 Lakh</h3>
-									<p>
-										The Mahindra Thar ROXX is a rugged and stylish off-road SUV with a five-door design, advanced features, and powerful performance.
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc555.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage: 16.8 km/l
-											<span class="featured-mi-span"> JBL Sound System</span> 
-											<span class="featured-hp-span"> Kryotec 2.0L Diesel Engine</span>
-											 automatic
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Tata Harrier</a></h2>
-									<h3>₹17.31 Lakh - ₹31.80 Lakh</h3>
-									<p>
-										The Tata Harrier is a bold and powerful SUV with a stylish design, advanced features, and strong diesel performance
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc77.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage: 15.42 km/l
-											<span class="featured-mi-span">  4XPLOR 4WD </span> 
-											<span class="featured-hp-span"> 2.0L Petrol & 2.2L Diesel</span>
-											 automatic
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#">Mahindra Scorpio N</a></h2>
-									<h3>₹17.05 Lakh - ₹31.75 Lakh</h3>
-									<p>
-										Rugged, powerful, and advanced with premium comfort, safety, and off-road capability 
-									</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-lg-3 col-md-4 col-sm-6">
-							<div class="single-featured-cars">
-								<div class="featured-img-box">
-									<div class="featured-cars-img">
-										<img src="{% static 'assets/images/featured-cars/fc88.png'%}" alt="cars">
-									</div>
-									<div class="featured-model-info">
-										<p>
-											Mileage:  14.2 km/l
-											<span class="featured-mi-span"> off-road ready</span> 
-											<span class="featured-hp-span"> comfortable</span>
-											 automatic
-										</p>
-									</div>
-								</div>
-								<div class="featured-cars-txt">
-									<h2><a href="#"> Toyota Fortuner</a></h2>
-									<h3>₹37.77 Lakh - ₹58.19 Lakh</h3>
-									<p>
-										A powerful and rugged vehicle with premium features, advanced technology, and excellent off-road capability
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div><!--/.container-->
+<section id="featured-cars" class="featured-cars">
+    <div class="container">
+        <div class="section-header">
+            <p>Checkout <span>the</span> featured cars</p>
+            <h2>Featured Cars</h2>
+        </div>
+        <div class="featured-cars-content">
+            <div class="row">
+                {% for car in featured_cars %}
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="single-featured-cars">
+                        <div class="featured-img-box">
+                            <div class="featured-cars-img">
+                                {% if car.image_file %}
+                                    <img src="{{ car.image_file.url }}" alt="{{ car.car_model }}">
+                                {% else %}
+                                    <img src="{% static 'assets/images/default-car.png' %}" alt="Default Car">
+                                {% endif %}
+                            </div>
+                            <div class="featured-model-info">
+                                <p>
+                                    Mileage: {{ car.mileage }} km/l
+                                    <span class="featured-mi-span">{{ car.engine_type }}</span> 
+                                    <span class="featured-hp-span">{{ car.horse_power }} HP</span>
+                                    {{ car.transmission }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="featured-cars-txt">
+                            <h2><a href="#">{{ car.car_model }}</a></h2>
+                            <h3>₹{{ car.price }} Lakh</h3>
+                            <p>{{ car.discription|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No featured cars available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
 
-		</section><!--/.featured-cars-->
-		<!--featured-cars end -->
 
 		<!-- clients-say strat -->
 		<section id="clients-say"  class="clients-say">
