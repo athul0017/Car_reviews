@@ -319,7 +319,6 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     margin-top: 80px;
     margin-left: 53px;
 }
-
 /*.single-model-search*/
 
 /*-------------------------------------
@@ -710,4 +709,12 @@ nav.navbar.bootsnav .navbar-toggle i{color: #4e4ffa;}
     0%   {bottom:0px;}
     100%  {bottom:7px;}
 }
-/*========================Thank you=================
+/*========================Thank you=================*/
+
+.model-search-content-layout-inner {
+    bottom: 0 !important;
+    position: relative !important;
+}
+.car-continer {
+    margin-top: 15px;
+}

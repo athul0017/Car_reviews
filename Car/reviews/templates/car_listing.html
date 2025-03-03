@@ -1,0 +1,151 @@
+{% extends 'layout_inner.html' %}
+{% load static %}
+
+
+{%block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="model-search-content model-search-content-layout-inner">
+                <div class="row">
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Car Brand</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">Brand</option><!-- /.option-->
+
+                                    <option value="2018">2018</option><!-- /.option-->
+
+                                    <option value="2017">2017</option><!-- /.option-->
+                                    <option value="2016">2016</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                        <div class="single-model-search">
+                            <h2>Car Model</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">Model</option><!-- /.option-->
+
+                                    <option value="sedan">sedan</option><!-- /.option-->
+
+                                    <option value="van">van</option><!-- /.option-->
+                                    <option value="roadster">roadster</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                    </div>
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Categories</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">body style</option><!-- /.option-->
+
+                                    <option value="toyota">toyota</option><!-- /.option-->
+
+                                    <option value="holden">holden</option><!-- /.option-->
+                                    <option value="maecedes-benz">maecedes-benz.</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                        <div class="single-model-search">
+                            <h2>Transmission</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">gearbox</option><!-- /.option-->
+
+                                    <option value="something">something</option><!-- /.option-->
+
+                                    <option value="something">something</option><!-- /.option-->
+                                    <option value="something">something</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                    </div>
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Fuel Type</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">fuel</option><!-- /.option-->
+
+                                    <option value="kia-rio">kia-rio</option><!-- /.option-->
+
+                                    <option value="mitsubishi">mitsubishi</option><!-- /.option-->
+                                    <option value="ford">ford</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                        <div class="single-model-search">
+                            <h2>Price Range</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+
+                                    <option value="default">price</option><!-- /.option-->
+
+                                    <option value="$0.00">$0.00</option><!-- /.option-->
+
+                                    <option value="$0.00">$0.00</option><!-- /.option-->
+                                    <option value="$0.00">$0.00</option><!-- /.option-->
+
+                                </select><!-- /.select-->
+                            </div><!-- /.model-select-icon -->
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12">
+                        <div class="single-model-search text-center">
+                            <button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
+                                search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    
+    <div class="row g-4 car-continer">
+       
+        {% for car in cars %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-lg car-card" ondblclick="window.location.href='#'">
+                <img src="{{ car.image_file.url }}" class="card-img-top" alt="{{ car.car_model }}">
+                <div class="card-body">
+                    <h5 class="card-title text-center">{{ car.car_model }}</h5>
+                    <div class="d-flex justify-content-center gap-2 mb-3">
+                        <span class="badge bg-primary badge-custom">{{ car.variant }}</span>
+                        <span class="badge bg-secondary badge-custom">{{ car.transmission }}</span>
+                    </div>
+                    <p class="card-text text-center">
+                        <strong>Engine:</strong> {{ car.engine_type }}<br>
+                        <strong>Mileage:</strong> {{ car.mileage }} km/l<br>
+                        <strong>Horsepower:</strong> {{ car.horse_power }} HP<br>
+                        <strong>Torque:</strong> {{ car.torque }} Nm
+                    </p>
+                    <div class="text-center">
+                        <span class="badge bg-success fs-5">₹{{ car.price }} Lakh</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

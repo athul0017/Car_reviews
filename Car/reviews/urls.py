@@ -7,4 +7,5 @@ urlpatterns = [
      # Newest cars page
       path('login/', login_view, name='login'),#login page 
       path('signup/', signup_view, name='signup'),#signup page
+      path('cars/', views.car_listing, name='car_listing'), 
 ]
