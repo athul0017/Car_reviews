@@ -94,7 +94,20 @@
 				                    <li class="scroll"><a href="#new-cars">new cars</a></li>
 				                    <li class="scroll"><a href="#brand">brands</a></li>
 				                    <li class="scroll"><a href="#contact">contact</a></li>
-									<li class="scroll"><a href="{% url 'login' %}">Login</a></li>
+									
+
+                                   <!-- Display user's name if logged in, otherwise show Login link -->
+                                   {% if user.is_authenticated %}
+						           <li class="scroll"><a href="#">{{ user.username }}</a></li>
+								   <form method="POST" action="{% url 'logout' %}">
+									{% csrf_token %}
+						           <!-- <li class="scroll"><a href="{% url 'logout' %}">Logout</a></li> -->
+								   		<button type="submit">Log out</button>
+									</form>
+					               {% else %}
+						           <li class="scroll"><a href="{% url 'login' %}">Login</a></li>
+					               {% endif %}
+
 				                </ul><!--/.nav -->
 				            </div><!-- /.navbar-collapse -->
 				        </div><!--/.container-->
@@ -625,7 +638,7 @@
         <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
 		
 		<!-- bootsnav js -->
-		<script src="{% static 'assets/js/bootsnav.js'%}"></script>
+		<!-- <script src="{% static 'assets/js/bootsnav.js'%}"></script> -->
 
 		<!--owl.carousel.js-->
         <script src="{% static 'assets/js/owl.carousel.min.js'%}"></script>
