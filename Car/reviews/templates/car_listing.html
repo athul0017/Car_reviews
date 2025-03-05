@@ -119,33 +119,48 @@
         </div>
     </div>
 
-    
-    
-    <div class="row g-4 car-continer">
-       
+    <div class="container">
         {% for car in cars %}
-        <div class="col-md-6 col-lg-4">
-            <div class="card shadow-lg car-card" ondblclick="window.location.href='#'">
-                <img src="{{ car.image_file.url }}" class="card-img-top" alt="{{ car.car_model }}">
-                <div class="card-body">
-                    <h5 class="card-title text-center">{{ car.car_model }}</h5>
-                    <div class="d-flex justify-content-center gap-2 mb-3">
-                        <span class="badge bg-primary badge-custom">{{ car.variant }}</span>
-                        <span class="badge bg-secondary badge-custom">{{ car.transmission }}</span>
-                    </div>
-                    <p class="card-text text-center">
-                        <strong>Engine:</strong> {{ car.engine_type }}<br>
-                        <strong>Mileage:</strong> {{ car.mileage }} km/l<br>
-                        <strong>Horsepower:</strong> {{ car.horse_power }} HP<br>
-                        <strong>Torque:</strong> {{ car.torque }} Nm
-                    </p>
-                    <div class="text-center">
-                        <span class="badge bg-success fs-5">₹{{ car.price }} Lakh</span>
+            {% if forloop.counter0|divisibleby:3 %}
+            <div class="car-box p-3 mb-4 border rounded shadow-lg">  <!-- Outer Box -->
+                <div class="row g-4 car-container">  <!-- Start a new row every 3 cars -->
+            {% endif %}
+            
+            <div class="col-md-4">
+                <div class="card shadow-lg car-card" ondblclick="window.location.href='{% url "car_details" car.id %}'">
+
+                    {% if car.image_file %}
+                    <img src="{{ car.image_file.url }}" class="card-img-top" alt="{{ car.car_model }}">
+                {% else %}
+                    <img src="/static/default-car.jpg" class="card-img-top" alt="No Image Available">
+                {% endif %}
+                
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ car.car_model }}</h5>
+                        <div class="d-flex justify-content-center gap-2 mb-3">
+                            <span class="badge bg-primary badge-custom">{{ car.variant }}</span>
+                            <span class="badge bg-secondary badge-custom">{{ car.transmission }}</span>
+                        </div>
+                        <p class="card-text text-center">
+                            <strong>Engine:</strong> {{ car.engine_type }}<br>
+                            <strong>Mileage:</strong> {{ car.mileage }} km/l<br>
+                            <strong>Horsepower:</strong> {{ car.horse_power }} HP<br>
+                            <strong>Torque:</strong> {{ car.torque }} Nm
+                        </p>
+                        <div class="text-center">
+                            <span class="badge bg-success fs-5">₹{{ car.price }} Lakh</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
-    </div>
-</div>
-{% endblock %}
+    
+                 {% if forloop.counter|divisibleby:3 or forloop.last %}
+                </div>  <!-- Close the row after every 3 cars -->
+            </div>  <!-- Close the outer box -->
+         {% endif %}
+    {% endfor %}
+    </div> 
+</div>      
+ {% endblock %} 
+    
+   

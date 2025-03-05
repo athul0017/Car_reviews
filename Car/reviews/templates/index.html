@@ -297,7 +297,12 @@
 								<div class="row">
 									<div class="col-md-7 col-sm-12">
 										<div class="new-cars-img">
-											<img src="{{ car.image_file.url}}" alt="{{ car.car_model }}" />
+											{% if car.image_file %}
+    <img src="{{ car.image_file.url }}" alt="{{ car.car_model }}" />
+{% else %}
+    <img src="/static/default-car.jpg" alt="No Image Available" />
+{% endif %}
+
 										</div><!--/.new-cars-img-->
 									</div>
 									<div class="col-md-5 col-sm-12">

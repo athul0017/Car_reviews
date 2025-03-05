@@ -58,7 +58,7 @@ class Car(models.Model):
 
 class Review(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="reviews")  # Each review is linked to a Car
-    user = models.OneToOneField(User, max_length=100,on_delete=models.CASCADE )  # Name of the reviewer
+    user = models.ForeignKey(User, max_length=100,on_delete=models.CASCADE )  # Name of the reviewer
     rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)], default=3)  # Rating from 1-5
     review_text = models.TextField(help_text="Write your review here")  # Review content
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when review is created

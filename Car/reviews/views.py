@@ -3,6 +3,8 @@ from .models import Car, Brand
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
 from django.contrib.auth.models import User
+from django.shortcuts import render, get_object_or_404
+from .models import Car, Review  # Make sure Car and Review models exist
 
 # Create your views here.
 
@@ -68,3 +70,15 @@ def car_listing(request):
         cars = cars.filter(car_model__model_name__icontains=search_query)
 
     return render(request, 'car_listing.html', {'cars': cars, 'brands': brands})
+
+
+def car_details(request, car_id):
+    car = Car.objects.get(id=car_id)  # Fetch the car using its ID
+    print(car.variant)
+
+    reviews = Review.objects.filter(car=car)  # Get all reviews for this car 
+
+    return render(request, 'car_details.html', {'car': car, 'reviews': reviews})
+
+
+
