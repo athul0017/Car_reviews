@@ -4,91 +4,79 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="model-search-content model-search-content-layout-inner">
-                <div class="row">
-                    <!-- Search filters -->
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Car Brand</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Brand</option>
-                                    <option value="Toyota">Toyota</option>
-                                    <option value="Honda">Honda</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="single-model-search">
-                            <h2>Car Model</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Model</option>
-                                    <option value="Sedan">Sedan</option>
-                                    <option value="SUV">SUV</option>
-                                </select>
-                            </div>
-                        </div>
+    <!-- Car Filter Form -->
+    <form method="GET" action="{% url 'car_listing' %}">
+        <div class="row">
+            <div class="col-md-3 col-sm-6">
+                <div class="single-model-search">
+                    <h2>Car Brand</h2>
+                    <div class="model-select-icon">
+                        <select class="form-control" name="brand">
+                            <option value="">All Brands</option>
+                            {% for brand in brands %}
+                                <option value="{{ brand.bname }}" {% if request.GET.brand == brand.bname %}selected{% endif %}>
+                                    {{ brand.bname }}
+                                </option>
+                            {% endfor %}
+                        </select>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Categories</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Body Style</option>
-                                    <option value="Hatchback">Hatchback</option>
-                                    <option value="SUV">SUV</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="single-model-search">
-                            <h2>Transmission</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Gearbox</option>
-                                    <option value="Manual">Manual</option>
-                                    <option value="Automatic">Automatic</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-model-search">
+                    <h2>Categories</h2>
+                    <div class="model-select-icon">
+                        <select class="form-control" name="category">
+                            <option value="">All Categories</option>
+                            <option value="Hatchback" {% if request.GET.category == "Hatchback" %}selected{% endif %}>Hatchback</option>
+                            <option value="SUV" {% if request.GET.category == "SUV" %}selected{% endif %}>SUV</option>
+                            <option value="Sedan" {% if request.GET.category == "Sedan" %}selected{% endif %}>Sedan</option>
+                        </select>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Fuel Type</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Fuel</option>
-                                    <option value="Petrol">Petrol</option>
-                                    <option value="Diesel">Diesel</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="single-model-search">
-                            <h2>Price Range</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-                                    <option value="default">Price</option>
-                                    <option value="0-5L">0-5L</option>
-                                    <option value="5-10L">5-10L</option>
-                                </select>
-                            </div>
-                        </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-model-search">
+                    <h2>Fuel Type</h2>
+                    <div class="model-select-icon">
+                        <select class="form-control" name="fuel">
+                            <option value="">All Fuel Types</option>
+                            <option value="Petrol" {% if request.GET.fuel == "Petrol" %}selected{% endif %}>Petrol</option>
+                            <option value="Diesel" {% if request.GET.fuel == "Diesel" %}selected{% endif %}>Diesel</option>
+                        </select>
                     </div>
+                </div>
+            </div>
 
-                    <div class="col-md-2 col-sm-12">
-                        <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn">Search</button>
-                        </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="single-model-search">
+                    <h2>Price Range</h2>
+                    <div class="model-select-icon">
+                        <select class="form-control" name="price">
+                            <option value="">All Prices</option>
+                            <option value="0-10L" {% if request.GET.price == "0-10L" %}selected{% endif %}>0-10L</option>
+                            <option value="10-20L" {% if request.GET.price == "10-20L" %}selected{% endif %}>10-20L</option>
+                            <option value="20-30L" {% if request.GET.price == "20-30L" %}selected{% endif %}>20-30L</option>
+                            <option value="30-40L" {% if request.GET.price == "30-40L" %}selected{% endif %}>30-40L</option>
+                            <option value="40-50L" {% if request.GET.price == "40-50L" %}selected{% endif %}>40-50L</option>
+                            <option value="50-60L" {% if request.GET.price == "50-60L" %}selected{% endif %}>50-60L</option>
+                            <option value="60-70L" {% if request.GET.price == "60-70L" %}selected{% endif %}>60-70L</option>
+                        </select>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Car listing with Bootstrap 3 grid -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary model-search-btn">Search</button>
+        </div>
+    </form>
+
+    <hr>
+
+    <!-- Car listing -->
     <div class="row">
         {% for car in cars %}
             <div class="col-md-4">
