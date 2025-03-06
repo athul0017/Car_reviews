@@ -1,166 +1,124 @@
 {% extends 'layout_inner.html' %}
 {% load static %}
 
-
-{%block content %}
-
-
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-
             <div class="model-search-content model-search-content-layout-inner">
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Car Brand</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-
-                                    <option value="default">Brand</option><!-- /.option-->
-
-                                    <option value="2018">2018</option><!-- /.option-->
-
-                                    <option value="2017">2017</option><!-- /.option-->
-                                    <option value="2016">2016</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
+                <form method="GET" action="{% url 'car_listing' %}">
+                    <div class="row">
+                        <!-- Car Brand -->
+                        <div class="col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>Car Brand</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control" name="brand">
+                                        <option value="">All Brands</option>
+                                        {% for brand in brands %}
+                                            <option value="{{ brand.bname }}" {% if request.GET.brand == brand.bname %}selected{% endif %}>
+                                                {{ brand.bname }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="single-model-search">
-                            <h2>Car Model</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
 
-                                    <option value="default">Model</option><!-- /.option-->
-
-                                    <option value="sedan">sedan</option><!-- /.option-->
-
-                                    <option value="van">van</option><!-- /.option-->
-                                    <option value="roadster">roadster</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
+                        <!-- Categories -->
+                        <div class="col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>Categories</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control" name="category">
+                                        <option value="">All Categories</option>
+                                        <option value="Hatchback" {% if request.GET.category == "Hatchback" %}selected{% endif %}>Hatchback</option>
+                                        <option value="SUV" {% if request.GET.category == "SUV" %}selected{% endif %}>SUV</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Categories</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
 
-                                    <option value="default">body style</option><!-- /.option-->
-
-                                    <option value="toyota">toyota</option><!-- /.option-->
-
-                                    <option value="holden">holden</option><!-- /.option-->
-                                    <option value="maecedes-benz">maecedes-benz.</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
+                        <!-- Fuel Type -->
+                        <div class="col-md-2 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>Fuel Type</h2>
+                                <div class="model-select-icon">
+                                    <select class="form-control" name="fuel">
+                                        <option value="">All Fuel Types</option>
+                                        <option value="Petrol" {% if request.GET.fuel == "Petrol" %}selected{% endif %}>Petrol</option>
+                                        <option value="Diesel" {% if request.GET.fuel == "Diesel" %}selected{% endif %}>Diesel</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div class="single-model-search">
-                            <h2>Transmission</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
 
-                                    <option value="default">gearbox</option><!-- /.option-->
+                        <!-- Search Field -->
+                        <div class="col-md-3 col-sm-12">
+                            <div class="single-model-search">
+                                <h2>Search</h2>
+                                <input type="text" class="form-control" name="search" placeholder="Search by model..." value="{{ request.GET.search|default:'' }}">
+                            </div>
+                        </div>
 
-                                    <option value="something">something</option><!-- /.option-->
-
-                                    <option value="something">something</option><!-- /.option-->
-                                    <option value="something">something</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
+                        <!-- Search Button -->
+                        <div class="col-md-2 col-sm-12 text-center">
+                            <div class="single-model-search">
+                                <button type="submit" class="btn btn-primary model-search-btn" style="margin-top: 25px;">Search</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-offset-1 col-md-2 col-sm-12">
-                        <div class="single-model-search">
-                            <h2>Fuel Type</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-
-                                    <option value="default">fuel</option><!-- /.option-->
-
-                                    <option value="kia-rio">kia-rio</option><!-- /.option-->
-
-                                    <option value="mitsubishi">mitsubishi</option><!-- /.option-->
-                                    <option value="ford">ford</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
-                        </div>
-                        <div class="single-model-search">
-                            <h2>Price Range</h2>
-                            <div class="model-select-icon">
-                                <select class="form-control">
-
-                                    <option value="default">price</option><!-- /.option-->
-
-                                    <option value="$0.00">$0.00</option><!-- /.option-->
-
-                                    <option value="$0.00">$0.00</option><!-- /.option-->
-                                    <option value="$0.00">$0.00</option><!-- /.option-->
-
-                                </select><!-- /.select-->
-                            </div><!-- /.model-select-icon -->
-                        </div>
-                    </div>
-                    <div class="col-md-2 col-sm-12">
-                        <div class="single-model-search text-center">
-                            <button class="welcome-btn model-search-btn" onclick="window.location.href='#'">
-                                search
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="container">
+    <!-- Car Listing -->
+    <div class="row">
         {% for car in cars %}
-            {% if forloop.counter0|divisibleby:3 %}
-            <div class="car-box p-3 mb-4 border rounded shadow-lg">  <!-- Outer Box -->
-                <div class="row g-4 car-container">  <!-- Start a new row every 3 cars -->
-            {% endif %}
-            
             <div class="col-md-4">
-                <div class="card shadow-lg car-card" ondblclick="window.location.href='{% url "car_details" car.id %}'">
-
-                    {% if car.image_file %}
-                    <img src="{{ car.image_file.url }}" class="card-img-top" alt="{{ car.car_model }}">
-                {% else %}
-                    <img src="/static/default-car.jpg" class="card-img-top" alt="No Image Available">
-                {% endif %}
-                
-                    <div class="card-body">
-                        <h5 class="card-title text-center">{{ car.car_model }}</h5>
-                        <div class="d-flex justify-content-center gap-2 mb-3">
-                            <span class="badge bg-primary badge-custom">{{ car.variant }}</span>
-                            <span class="badge bg-secondary badge-custom">{{ car.transmission }}</span>
-                        </div>
-                        <p class="card-text text-center">
-                            <strong>Engine:</strong> {{ car.engine_type }}<br>
-                            <strong>Mileage:</strong> {{ car.mileage }} km/l<br>
-                            <strong>Horsepower:</strong> {{ car.horse_power }} HP<br>
-                            <strong>Torque:</strong> {{ car.torque }} Nm
-                        </p>
-                        <div class="text-center">
-                            <span class="badge bg-success fs-5">₹{{ car.price }} Lakh</span>
-                        </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center"><strong>{{ car.car_model }}</strong></div>
+                    <div class="panel-body text-center">
+                        {% if car.image_file %}
+                            <img src="{{ car.image_file.url }}" class="img-responsive" alt="{{ car.car_model }}">
+                        {% else %}
+                            <img src="{% static 'default-car.jpg' %}" class="img-responsive" alt="No Image Available">
+                        {% endif %}
+                        <p><strong>Engine:</strong> {{ car.engine_type }}</p>
+                        <p><strong>Mileage:</strong> {{ car.mileage }} km/l</p>
+                        <p><strong>HP:</strong> {{ car.horse_power }} HP</p>
+                        <p><strong>Torque:</strong> {{ car.torque }} Nm</p>
+                        <p><span class="label label-success">₹{{ car.price }} Lakh</span></p>
                     </div>
                 </div>
             </div>
-    
-                 {% if forloop.counter|divisibleby:3 or forloop.last %}
-                </div>  <!-- Close the row after every 3 cars -->
-            </div>  <!-- Close the outer box -->
-         {% endif %}
-    {% endfor %}
-    </div> 
-</div>      
- {% endblock %} 
-    
-   
+
+            {% if forloop.counter|divisibleby:3 and not forloop.last %}
+                </div><div class="row">  <!-- Close and start a new row after every 3 cars -->
+            {% endif %}
+        {% empty %}
+            <div class="col-md-12 text-center">
+                <p>No cars found matching your criteria.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="text-center">
+        <ul class="pagination">
+            {% if cars.has_previous %}
+                <li><a href="?page=1{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">First</a></li>
+                <li><a href="?page={{ cars.previous_page_number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Previous</a></li>
+            {% endif %}
+
+            <li class="active"><a href="?page={{ cars.number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ cars.number }}</a></li>
+
+            {% if cars.has_next %}
+                <li><a href="?page={{ cars.next_page_number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Next</a></li>
+                <li><a href="?page={{ cars.paginator.num_pages }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Last</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

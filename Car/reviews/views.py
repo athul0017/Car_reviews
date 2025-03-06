@@ -5,6 +5,7 @@ from .forms import LoginForm
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from .models import Car, Review  # Make sure Car and Review models exist
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -69,7 +70,12 @@ def car_listing(request):
     if search_query:
         cars = cars.filter(car_model__model_name__icontains=search_query)
 
-    return render(request, 'car_listing.html', {'cars': cars, 'brands': brands})
+        # Add Pagination (6 cars per page)
+    paginator = Paginator(cars, 6)  
+    page_number = request.GET.get('page')  
+    cars_page = paginator.get_page(page_number)  
+
+    return render(request, 'car_listing.html', {'cars': cars_page, 'brands': brands})
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
