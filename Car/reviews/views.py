@@ -71,14 +71,32 @@ def car_listing(request):
 
     return render(request, 'car_listing.html', {'cars': cars, 'brands': brands})
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Car, Review
 
 def car_details(request, car_id):
-    car = Car.objects.get(id=car_id)  # Fetch the car using its ID
-    print(car.variant)
+    car = get_object_or_404(Car, id=car_id)  # Get the car or show 404
+    reviews = Review.objects.filter(car=car)  # Fetch all reviews for the car
 
-    reviews = Review.objects.filter(car=car)  # Get all reviews for this car 
+    if request.method == "POST":
+        if request.user.is_authenticated:  # Ensure user is logged in
+            review_rating = request.POST.get("review_rating")
+            review_text = request.POST.get("review_text")
+
+            if review_rating and review_text:
+                Review.objects.create(
+                    car=car,
+                    user=request.user,  # Store logged-in user
+                    rating=int(review_rating),
+                    review_text=review_text
+                )
+                return redirect('car_details', car_id=car.id)  # Refresh page after submission
+        else:
+            return redirect('login')  # Redirect to login if not authenticated
 
     return render(request, 'car_details.html', {'car': car, 'reviews': reviews})
+
 
 
 

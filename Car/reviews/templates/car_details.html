@@ -1,29 +1,14 @@
 {% extends 'layout_inner.html' %}
 {% load static %}
 
-{%block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Car Details - {{ car.name }}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
-<body>
-
-<header class="text-center" style="padding: 20px; background: linear-gradient(to right, #4B79A1, #283E51); color: white;">
-    <a href="{% url 'car_listing' %}" class="back-btn">&larr; Back</a>
-    <h1>{{ car.name }}</h1>
-</header>
-
+{% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-6">
             {% if car.image_file %}
                 <img src="{{ car.image_file.url }}" class="car-image img-responsive" alt="{{ car.name }}">
             {% else %}
-                <img src="/static/default-car.jpg" class="car-image img-responsive" alt="Default Image">
+                <img src="{% static 'default-car.jpg' %}" class="car-image img-responsive" alt="Default Image">
             {% endif %}
         </div>
         <div class="col-md-6">
@@ -35,7 +20,7 @@
                         <li class="list-group-item"><strong>Brand:</strong> {{ car.car_model.brand.bname }}</li>
                         <li class="list-group-item"><strong>Model:</strong> {{ car.car_model.model_name }}</li>
                         <li class="list-group-item"><strong>Year:</strong> {{ car.car_model.year }}</li>
-                        <li class="list-group-item"><strong>Engine:</strong> {{ car.engine }}</li>
+                        <li class="list-group-item"><strong>Engine:</strong> {{ car.engine_type }}</li>
                     </ul>
                 </div>
             </div>
@@ -45,28 +30,28 @@
     <h4 class="text-primary">Leave a Review:</h4>
     <div class="panel panel-default">
         <div class="panel-body">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label>Your Name:</label>
-                    <input type="text" name="reviewer_name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label>Rating:</label>
-                    <select name="review_rating" class="form-control">
-                        <option value="1">⭐️</option>
-                        <option value="2">⭐️⭐️</option>
-                        <option value="3">⭐️⭐️⭐️</option>
-                        <option value="4">⭐️⭐️⭐️⭐️</option>
-                        <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Your Review:</label>
-                    <textarea name="review_text" class="form-control" rows="3" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit Review</button>
-            </form>
+            {% if user.is_authenticated %}
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Rating:</label>
+                        <select name="review_rating" class="form-control">
+                            <option value="1">⭐️</option>
+                            <option value="2">⭐️⭐️</option>
+                            <option value="3">⭐️⭐️⭐️</option>
+                            <option value="4">⭐️⭐️⭐️⭐️</option>
+                            <option value="5">⭐️⭐️⭐️⭐️⭐️</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Review:</label>
+                        <textarea name="review_text" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            {% else %}
+                <p>Please <a href="{% url 'login' %}">log in</a> to leave a review.</p>
+            {% endif %}
         </div>
     </div>
 
@@ -75,7 +60,7 @@
         <div class="panel-body">
             {% for review in reviews %}
                 <div class="review">
-                    <h5>{{ review.name }}</h5>
+                    <h5>{{ review.user.username }}</h5>  <!-- ✅ Fixed: Show username instead of 'review.name' -->
                     <p class="text-warning">{{ review.rating }} ⭐</p>
                     <p>{{ review.review_text }}</p>
                 </div>
@@ -86,8 +71,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
-
-</body>
-</html>
