@@ -55,7 +55,7 @@ def signup_view(request):
     return render(request, 'signup.html')
 
 def car_listing(request):
-    cars = Car.objects.all()
+    cars = Car.objects.all().order_by('-created_at')
     brands = Brand.objects.all()
     
     # Get filters from request
