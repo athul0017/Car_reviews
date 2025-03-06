@@ -2,89 +2,108 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container">
     <div class="row">
         <div class="col-md-12">
             <div class="model-search-content model-search-content-layout-inner">
-                <form method="GET" action="{% url 'car_listing' %}">
-                    <div class="row">
-                        <!-- Car Brand -->
-                        <div class="col-md-2 col-sm-12">
-                            <div class="single-model-search">
-                                <h2>Car Brand</h2>
-                                <div class="model-select-icon">
-                                    <select class="form-control" name="brand">
-                                        <option value="">All Brands</option>
-                                        {% for brand in brands %}
-                                            <option value="{{ brand.bname }}" {% if request.GET.brand == brand.bname %}selected{% endif %}>
-                                                {{ brand.bname }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
+                <div class="row">
+                    <!-- Search filters -->
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Car Brand</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Brand</option>
+                                    <option value="Toyota">Toyota</option>
+                                    <option value="Honda">Honda</option>
+                                </select>
                             </div>
                         </div>
-
-                        <!-- Categories -->
-                        <div class="col-md-2 col-sm-12">
-                            <div class="single-model-search">
-                                <h2>Categories</h2>
-                                <div class="model-select-icon">
-                                    <select class="form-control" name="category">
-                                        <option value="">All Categories</option>
-                                        <option value="Hatchback" {% if request.GET.category == "Hatchback" %}selected{% endif %}>Hatchback</option>
-                                        <option value="SUV" {% if request.GET.category == "SUV" %}selected{% endif %}>SUV</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Fuel Type -->
-                        <div class="col-md-2 col-sm-12">
-                            <div class="single-model-search">
-                                <h2>Fuel Type</h2>
-                                <div class="model-select-icon">
-                                    <select class="form-control" name="fuel">
-                                        <option value="">All Fuel Types</option>
-                                        <option value="Petrol" {% if request.GET.fuel == "Petrol" %}selected{% endif %}>Petrol</option>
-                                        <option value="Diesel" {% if request.GET.fuel == "Diesel" %}selected{% endif %}>Diesel</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Search Field -->
-                        <div class="col-md-3 col-sm-12">
-                            <div class="single-model-search">
-                                <h2>Search</h2>
-                                <input type="text" class="form-control" name="search" placeholder="Search by model..." value="{{ request.GET.search|default:'' }}">
-                            </div>
-                        </div>
-
-                        <!-- Search Button -->
-                        <div class="col-md-2 col-sm-12 text-center">
-                            <div class="single-model-search">
-                                <button type="submit" class="btn btn-primary model-search-btn" style="margin-top: 25px;">Search</button>
+                        <div class="single-model-search">
+                            <h2>Car Model</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Model</option>
+                                    <option value="Sedan">Sedan</option>
+                                    <option value="SUV">SUV</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </form>
+
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Categories</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Body Style</option>
+                                    <option value="Hatchback">Hatchback</option>
+                                    <option value="SUV">SUV</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="single-model-search">
+                            <h2>Transmission</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Gearbox</option>
+                                    <option value="Manual">Manual</option>
+                                    <option value="Automatic">Automatic</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-offset-1 col-md-2 col-sm-12">
+                        <div class="single-model-search">
+                            <h2>Fuel Type</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Fuel</option>
+                                    <option value="Petrol">Petrol</option>
+                                    <option value="Diesel">Diesel</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="single-model-search">
+                            <h2>Price Range</h2>
+                            <div class="model-select-icon">
+                                <select class="form-control">
+                                    <option value="default">Price</option>
+                                    <option value="0-5L">0-5L</option>
+                                    <option value="5-10L">5-10L</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 col-sm-12">
+                        <div class="single-model-search text-center">
+                            <button class="welcome-btn model-search-btn">Search</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Car Listing -->
+    <!-- Car listing with Bootstrap 3 grid -->
     <div class="row">
         {% for car in cars %}
             <div class="col-md-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-center"><strong>{{ car.car_model }}</strong></div>
+                    <div class="panel-heading text-center">
+                        <strong><a href="{% url 'car_details' car.id %}">{{ car.car_model }}</a></strong>
+                    </div>
                     <div class="panel-body text-center">
-                        {% if car.image_file %}
-                            <img src="{{ car.image_file.url }}" class="img-responsive" alt="{{ car.car_model }}">
-                        {% else %}
-                            <img src="{% static 'default-car.jpg' %}" class="img-responsive" alt="No Image Available">
-                        {% endif %}
+                        <a href="{% url 'car_details' car.id %}">
+                            {% if car.image_file %}
+                                <img src="{{ car.image_file.url }}" class="img-responsive" alt="{{ car.car_model }}">
+                            {% else %}
+                                <img src="{% static 'default-car.jpg' %}" class="img-responsive" alt="No Image Available">
+                            {% endif %}
+                        </a>
                         <p><strong>Engine:</strong> {{ car.engine_type }}</p>
                         <p><strong>Mileage:</strong> {{ car.mileage }} km/l</p>
                         <p><strong>HP:</strong> {{ car.horse_power }} HP</p>
@@ -108,17 +127,18 @@
     <div class="text-center">
         <ul class="pagination">
             {% if cars.has_previous %}
-                <li><a href="?page=1{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">First</a></li>
-                <li><a href="?page={{ cars.previous_page_number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Previous</a></li>
+                <li><a href="?page=1">First</a></li>
+                <li><a href="?page={{ cars.previous_page_number }}">Previous</a></li>
             {% endif %}
 
-            <li class="active"><a href="?page={{ cars.number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">{{ cars.number }}</a></li>
+            <li class="active"><a href="?page={{ cars.number }}">{{ cars.number }}</a></li>
 
             {% if cars.has_next %}
-                <li><a href="?page={{ cars.next_page_number }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Next</a></li>
-                <li><a href="?page={{ cars.paginator.num_pages }}{% if request.GET.brand %}&brand={{ request.GET.brand }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.fuel %}&fuel={{ request.GET.fuel }}{% endif %}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">Last</a></li>
+                <li><a href="?page={{ cars.next_page_number }}">Next</a></li>
+                <li><a href="?page={{ cars.paginator.num_pages }}">Last</a></li>
             {% endif %}
         </ul>
     </div>
 </div>
+
 {% endblock %}
