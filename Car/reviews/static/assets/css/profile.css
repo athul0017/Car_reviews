@@ -1,0 +1,12 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.panel {
+    margin-top: 50px;
+}
+
+.img-circle {
+    border: 3px solid #ddd;
+}

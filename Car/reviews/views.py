@@ -103,6 +103,31 @@ def car_details(request, car_id):
 
     return render(request, 'car_details.html', {'car': car, 'reviews': reviews})
 
+# User Profile View
+@login_required
+def profile(request):
+    return render(request, 'profile.html', {'user': request.user})
 
+# Edit Profile View
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        user = request.user
+        username = request.POST.get('username', user.username)
+        email = request.POST.get('email', user.email)
+
+        # Check if new username/email is already taken
+        if User.objects.exclude(id=user.id).filter(username=username).exists():
+            return render(request, 'edit_profile.html', {'error_message': 'Username already taken'})
+        if User.objects.exclude(id=user.id).filter(email=email).exists():
+            return render(request, 'edit_profile.html', {'error_message': 'Email already registered'})
+
+        # Update user details
+        user.username = username
+        user.email = email
+        user.save()
+        return redirect('profile')  # Redirect to profile page after update
+
+    return render(request, 'edit_profile.html')
 
 

@@ -11,4 +11,6 @@ urlpatterns = [
     path('cars/', views.car_listing, name='car_listing'), 
     path('cars/<int:car_id>/', views.car_details, name='car_details'),  # Car details page
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),  # Logout page
+    path('profile/', views. profile, name='profile'),  # Profile view
+    path('profile/edit/', views.edit_profile, name='edit_profile'),  # Edit Profile view
 ]

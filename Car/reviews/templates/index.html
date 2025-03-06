@@ -98,16 +98,19 @@
 
                                    <!-- Display user's name if logged in, otherwise show Login link -->
                                    {% if user.is_authenticated %}
-						           <li class="scroll"><a href="#">{{ user.username }}</a></li>
-								   <form method="POST" action="{% url 'logout' %}">
-									{% csrf_token %}
-						           <!-- <li class="scroll"><a href="{% url 'logout' %}">Logout</a></li> -->
-								   		<button type="submit">Log out</button>
+						           <li class="scroll"><a href="{% url 'profile' %}">{{ user.username }}</a></li>
+								   <li>
+									<form method="POST" action="{% url 'logout' %}" style="display: inline;">
+										{% csrf_token %}
+										<button type="submit" class="btn btn-link navbar-btn">Logout</button>
 									</form>
-					               {% else %}
-						           <li class="scroll"><a href="{% url 'login' %}">Login</a></li>
-					               {% endif %}
-
+								    </li>
+							         {% else %}
+								    <li class="scroll"><a href="{% url 'login' %}">Login</a></li>
+							        {% endif %}
+								   
+								   
+			
 				                </ul><!--/.nav -->
 				            </div><!-- /.navbar-collapse -->
 				        </div><!--/.container-->
