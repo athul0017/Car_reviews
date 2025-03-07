@@ -2,31 +2,32 @@
 {% load static %}
 
 {% block content %}
-
 <div class="container">
-    <!-- Car Filter Form -->
-    <form method="GET" action="{% url 'car_listing' %}">
-        <div class="row">
-            <div class="col-md-3 col-sm-6">
-                <div class="single-model-search">
-                    <h2>Car Brand</h2>
-                    <div class="model-select-icon">
+    <!-- Combined Search and Filter Form -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="text-center">Search & Filter Cars</h4>
+        </div>
+        <div class="panel-body">
+            <form method="GET" action="{% url 'car_listing' %}">
+                <div class="row">
+                    <!-- Search Input -->
+                    <div class="col-md-4">
+                        <input type="text" class="form-control" name="search" placeholder="Search cars..." value="{{ request.GET.search }}">
+                    </div>
+
+                    <!-- Car Brand Filter -->
+                    <div class="col-md-2">
                         <select class="form-control" name="brand">
                             <option value="">All Brands</option>
                             {% for brand in brands %}
-                                <option value="{{ brand.bname }}" {% if request.GET.brand == brand.bname %}selected{% endif %}>
-                                    {{ brand.bname }}
-                                </option>
+                                <option value="{{ brand.bname }}" {% if request.GET.brand == brand.bname %}selected{% endif %}>{{ brand.bname }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="single-model-search">
-                    <h2>Categories</h2>
-                    <div class="model-select-icon">
+                    <!-- Car Category Filter -->
+                    <div class="col-md-2">
                         <select class="form-control" name="category">
                             <option value="">All Categories</option>
                             <option value="Hatchback" {% if request.GET.category == "Hatchback" %}selected{% endif %}>Hatchback</option>
@@ -34,99 +35,105 @@
                             <option value="Sedan" {% if request.GET.category == "Sedan" %}selected{% endif %}>Sedan</option>
                         </select>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="single-model-search">
-                    <h2>Fuel Type</h2>
-                    <div class="model-select-icon">
+                    <!-- Fuel Type Filter -->
+                    <div class="col-md-2">
                         <select class="form-control" name="fuel">
                             <option value="">All Fuel Types</option>
                             <option value="Petrol" {% if request.GET.fuel == "Petrol" %}selected{% endif %}>Petrol</option>
                             <option value="Diesel" {% if request.GET.fuel == "Diesel" %}selected{% endif %}>Diesel</option>
                         </select>
                     </div>
-                </div>
-            </div>
 
-            <div class="col-md-3 col-sm-6">
-                <div class="single-model-search">
-                    <h2>Price Range</h2>
-                    <div class="model-select-icon">
+                    <!-- Price Range Filter -->
+                    <div class="col-md-2">
                         <select class="form-control" name="price">
                             <option value="">All Prices</option>
                             <option value="0-10L" {% if request.GET.price == "0-10L" %}selected{% endif %}>0-10L</option>
                             <option value="10-20L" {% if request.GET.price == "10-20L" %}selected{% endif %}>10-20L</option>
                             <option value="20-30L" {% if request.GET.price == "20-30L" %}selected{% endif %}>20-30L</option>
                             <option value="30-40L" {% if request.GET.price == "30-40L" %}selected{% endif %}>30-40L</option>
-                            <option value="40-50L" {% if request.GET.price == "40-50L" %}selected{% endif %}>40-50L</option>
-                            <option value="50-60L" {% if request.GET.price == "50-60L" %}selected{% endif %}>50-60L</option>
-                            <option value="60-70L" {% if request.GET.price == "60-70L" %}selected{% endif %}>60-70L</option>
                         </select>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary model-search-btn">Search</button>
+                <!-- Submit Button -->
+                <div class="text-center" style="margin-top: 15px;">
+                    <button type="submit" class="btn btn-primary">Search & Filter</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 
     <hr>
 
-    <!-- Car listing -->
-    <div class="row">
-        {% for car in cars %}
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading text-center">
-                        <strong><a href="{% url 'car_details' car.id %}">{{ car.car_model }}</a></strong>
-                    </div>
-                    <div class="panel-body text-center">
-                        <a href="{% url 'car_details' car.id %}">
-                            {% if car.image_file %}
-                                <img src="{{ car.image_file.url }}" class="img-responsive" alt="{{ car.car_model }}">
-                            {% else %}
-                                <img src="{% static 'default-car.jpg' %}" class="img-responsive" alt="No Image Available">
-                            {% endif %}
-                        </a>
-                        <p><strong>Engine:</strong> {{ car.engine_type }}</p>
-                        <p><strong>Mileage:</strong> {{ car.mileage }} km/l</p>
-                        <p><strong>HP:</strong> {{ car.horse_power }} HP</p>
-                        <p><strong>Torque:</strong> {{ car.torque }} Nm</p>
-                        <p><span class="label label-success">₹{{ car.price }} Lakh</span></p>
+    <!-- ✅ Add compare form -->
+    <form method="GET" action="{% url 'compare_cars' %}">
+        <div class="row">
+            {% for car in cars %}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading text-center">
+                            <strong><a href="{% url 'car_details' car.id %}">{{ car.car_model }} {{ car.year }}</a></strong>
+                        </div>
+                        <div class="panel-body text-center">
+                            <!-- Checkbox for selecting cars to compare -->
+                            <input type="checkbox" name="compare" value="{{ car.id }}"> Compare
+                            
+                            <a href="{% url 'car_details' car.id %}">
+                                {% if car.image_file %}
+                                    <img src="{{ car.image_file.url }}" class="thumbnail img-responsive" alt="{{ car.car_model }}">
+                                {% else %}
+                                    <img src="{% static 'default-car.jpg' %}" class="thumbnail img-responsive" alt="No Image Available">
+                                {% endif %}
+                            </a>
+                            <table class="table table-bordered">
+                                <tr><td><strong>Engine</strong></td><td>{{ car.engine_type }}</td></tr>
+                                <tr><td><strong>Mileage</strong></td><td>{{ car.mileage }} km/l</td></tr>
+                                <tr><td><strong>HP</strong></td><td>{{ car.horse_power }} HP</td></tr>
+                                <tr><td><strong>Torque</strong></td><td>{{ car.torque }} Nm</td></tr>
+                                <tr><td><strong>Brand</strong></td><td>{{ car.brand }}</td></tr>  <!-- Brand -->
+                                <tr><td><strong>Fuel Type</strong></td><td>{{ car.fuel_type }}</td></tr>  <!-- Fuel Type -->                             
+
+                            </table>
+                            <p class="text-success"><strong>₹{{ car.price }} Lakh</strong></p>
+                        </div>
                     </div>
                 </div>
-            </div>
+    
+                {% if forloop.counter|divisibleby:3 %}
+                    </div><div class="row">
+                {% endif %}
+            {% empty %}
+                <div class="col-md-12 text-center">
+                    <p>No cars found matching your criteria.</p>
+                </div>
+            {% endfor %}
+        </div>
+    
+        <!-- Compare Button -->
+        <div class="text-center" style="margin-top: 15px;">
+            <button type="submit" class="btn btn-primary">Compare Selected Cars</button>
+        </div>
+    </form>
+    
+    <!-- Pagination Controls -->
+    <div class="text-center" style="margin-top: 20px;">
+        <nav>
+            <ul class="pagination">
+                {% if cars.has_previous %}
+                    <li><a href="?page=1">First</a></li>
+                    <li><a href="?page={{ cars.previous_page_number }}">Previous</a></li>
+                {% endif %}
 
-            {% if forloop.counter|divisibleby:3 and not forloop.last %}
-                </div><div class="row">  <!-- Close and start a new row after every 3 cars -->
-            {% endif %}
-        {% empty %}
-            <div class="col-md-12 text-center">
-                <p>No cars found matching your criteria.</p>
-            </div>
-        {% endfor %}
-    </div>
+                <li class="active"><a>Page {{ cars.number }} of {{ cars.paginator.num_pages }}</a></li>
 
-    <!-- Pagination -->
-    <div class="text-center">
-        <ul class="pagination">
-            {% if cars.has_previous %}
-                <li><a href="?page=1">First</a></li>
-                <li><a href="?page={{ cars.previous_page_number }}">Previous</a></li>
-            {% endif %}
-
-            <li class="active"><a href="?page={{ cars.number }}">{{ cars.number }}</a></li>
-
-            {% if cars.has_next %}
-                <li><a href="?page={{ cars.next_page_number }}">Next</a></li>
-                <li><a href="?page={{ cars.paginator.num_pages }}">Last</a></li>
-            {% endif %}
-        </ul>
+                {% if cars.has_next %}
+                    <li><a href="?page={{ cars.next_page_number }}">Next</a></li>
+                    <li><a href="?page={{ cars.paginator.num_pages }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
-
 {% endblock %}

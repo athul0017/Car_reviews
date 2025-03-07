@@ -1,0 +1,81 @@
+{% extends 'layout_inner.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Compare Cars</h2>
+
+    {% if messages %}
+        <div class="alert alert-danger">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if car1 and car2 %}
+        <div class="table-responsive">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>{{ car1.car_model }} {{ car1.year }}</th>
+                        <th>{{ car2.car_model }} {{ car2.year }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Image</strong></td>
+                        <td><img src="{{ car1.image_file.url }}" class="img-thumbnail" width="150" alt="{{ car1.car_model }}" onerror="this.src='{% static 'images/default_car_image.jpg' %}'"></td>
+                        <td><img src="{{ car2.image_file.url }}" class="img-thumbnail" width="150" alt="{{ car2.car_model }}" onerror="this.src='{% static 'images/default_car_image.jpg' %}'"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Brand</strong></td>
+                        <td>{{ car1.brand }}</td>
+                        <td>{{ car2.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Category</strong></td>
+                        <td>{{ car1.category }}</td>
+                        <td>{{ car2.category }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Engine</strong></td>
+                        <td>{{ car1.engine_type }}</td>
+                        <td>{{ car2.engine_type }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mileage (km/l)</strong></td>
+                        <td>{{ car1.mileage }}</td>
+                        <td>{{ car2.mileage }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Horse Power (HP)</strong></td>
+                        <td>{{ car1.horse_power }}</td>
+                        <td>{{ car2.horse_power }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Torque (Nm)</strong></td>
+                        <td>{{ car1.torque }}</td>
+                        <td>{{ car2.torque }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fuel Type</strong></td>
+                        <td>{{ car1.fuel_type }}</td>
+                        <td>{{ car2.fuel_type }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Price (₹ in Lakhs)</strong></td>
+                        <td class="text-success"><strong>₹{{ car1.price }}</strong></td>
+                        <td class="text-success"><strong>₹{{ car2.price }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <div class="text-center">
+        <a href="{% url 'car_listing' %}" class="btn btn-primary">Back to Listings</a>
+    </div>
+</div>
+{% endblock %}

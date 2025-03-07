@@ -6,36 +6,61 @@
     <div class="row">
         <div class="col-md-6">
             {% if car.image_file %}
-                <img src="{{ car.image_file.url }}" class="car-image img-responsive" alt="{{ car.name }}">
+                <img src="{{ car.image_file.url }}" class="car-image img-responsive img-thumbnail" alt="{{ car.car_model.model_name }}">
             {% else %}
-                <img src="{% static 'default-car.jpg' %}" class="car-image img-responsive" alt="Default Image">
+                <img src="{% static 'default-car.jpg' %}" class="car-image img-responsive img-thumbnail" alt="Default Image">
             {% endif %}
         </div>
         <div class="col-md-6">
             <div class="panel panel-default details-card">
                 <div class="panel-body">
-                    <h2 class="text-primary">{{ car.name }}</h2>
-                    <h4 class="text-success">Price: {{ car.price }}</h4>
+                    <h2 class="text-primary">{{ car.car_model.model_name }}</h2>
+                    <h4 class="text-success">Price: ₹{{ car.price }}</h4>
                     <ul class="list-group">
                         <li class="list-group-item"><strong>Brand:</strong> {{ car.car_model.brand.bname }}</li>
                         <li class="list-group-item"><strong>Model:</strong> {{ car.car_model.model_name }}</li>
                         <li class="list-group-item"><strong>Year:</strong> {{ car.car_model.year }}</li>
                         <li class="list-group-item"><strong>Engine:</strong> {{ car.engine_type }}</li>
+                        <li class="list-group-item"><strong>Transmission:</strong> {{ car.transmission }}</li>
+                        <li class="list-group-item"><strong>Mileage:</strong> {{ car.mileage }} km/l</li>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 
-    <h4 class="text-primary">Leave a Review:</h4>
+    <!-- Average Rating Section -->
+<h4 class="text-primary mt-4">Average Rating:</h4>
+<div class="panel panel-default">
+    <div class="panel-body">
+        {% if avg_rating %}
+            <p class="text-warning" style="font-size: 1.2em;">
+                {% for _ in "12345"|make_list %}
+                    {% if forloop.counter <= avg_rating|floatformat:0 %}
+                        ⭐
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+                ({{ avg_rating|floatformat:1 }}) <!-- Display average rating with 1 decimal place -->
+            </p>
+        {% else %}
+            <p>No ratings yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+
+    <!-- Leave a Review Section -->
+    <h4 class="text-primary mt-4">Leave a Review:</h4>
     <div class="panel panel-default">
         <div class="panel-body">
             {% if user.is_authenticated %}
-                <form method="POST">
+                <form method="POST" action="">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label>Rating:</label>
-                        <select name="review_rating" class="form-control">
+                        <label for="review_rating">Rating:</label>
+                        <select name="review_rating" id="review_rating" class="form-control">
                             <option value="1">⭐️</option>
                             <option value="2">⭐️⭐️</option>
                             <option value="3">⭐️⭐️⭐️</option>
@@ -44,8 +69,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Your Review:</label>
-                        <textarea name="review_text" class="form-control" rows="3" required></textarea>
+                        <label for="review_text">Your Review:</label>
+                        <textarea name="review_text" id="review_text" class="form-control" rows="3" required></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit Review</button>
                 </form>
@@ -55,16 +80,23 @@
         </div>
     </div>
 
-    <h4 class="text-primary">User Reviews:</h4>
+    <!-- User Reviews Section -->
+    <h4 class="text-primary mt-4">User Reviews:</h4>
     <div class="panel panel-default">
         <div class="panel-body">
             {% for review in reviews %}
-                <div class="review">
-                    <h5>{{ review.user.username }}</h5>  <!-- ✅ Fixed: Show username instead of 'review.name' -->
-                    <p class="text-warning">{{ review.rating }} ⭐</p>
+                <div class="review p-3 mb-3 border rounded shadow-sm" style="background-color: #f8f9fa;">
+                    <h5 class="font-weight-bold">{{ review.user.username }}</h5>
+                    <span class="text-muted" style="font-size: 0.9em;">Posted on: {{ review.created_at|date:"d M, Y" }}</span>
+                    <p class="text-warning">
+                        {% for _ in "12345"|make_list %}
+                            {% if forloop.counter <= review.rating %}
+                                ⭐
+                            {% endif %}
+                        {% endfor %}
+                    </p>
                     <p>{{ review.review_text }}</p>
                 </div>
-                <hr>
             {% empty %}
                 <p>No reviews yet.</p>
             {% endfor %}
