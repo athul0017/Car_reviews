@@ -143,7 +143,7 @@ nav.navbar.bootsnav {
     letter-spacing: 3px;
     font-family: 'Rufina', serif;
     font-weight: 700;
-    padding: 45px 0px;
+    padding: 20px 0px;
     text-transform:uppercase;
 }
 .navbar-header a.navbar-brand span{display: inline-block;color:#4e4ffa;text-transform:capitalize;}

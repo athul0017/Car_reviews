@@ -26,7 +26,7 @@ class Car(models.Model):
     discription = models.TextField(null=True, blank=False)
     category = models.CharField(max_length=50, help_text="e.g., SUV, Sedan, Hatchback", null=True, blank=False)
     engine_type = models.CharField(max_length=20)
-    transmission = models.CharField(max_length=20, choices=[("Manual", "Manual"), ("Automatic", "Automatic")])
+    transmission = models.CharField(max_length=20,choices=[("Manual","Manual"),("Automatic","Automatic")] )
     mileage = models.DecimalField(max_digits=10, decimal_places=2, help_text="in km/l")
     horse_power = models.DecimalField(max_digits=10, decimal_places=2, help_text="in HP")
     torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")
@@ -64,3 +64,4 @@ class Review(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+        

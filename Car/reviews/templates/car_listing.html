@@ -31,8 +31,10 @@
                         <select class="form-control" name="category">
                             <option value="">All Categories</option>
                             <option value="Hatchback" {% if request.GET.category == "Hatchback" %}selected{% endif %}>Hatchback</option>
+                            <option value="Crossover SUV" {% if request.GET.category == "Crossover SUV" %}selected{% endif %}>Crossover SUV</option>
                             <option value="SUV" {% if request.GET.category == "SUV" %}selected{% endif %}>SUV</option>
                             <option value="Sedan" {% if request.GET.category == "Sedan" %}selected{% endif %}>Sedan</option>
+                            <option value="mpv" {% if request.GET.category == "mpv" %}selected{% endif %}>MPV</option>
                         </select>
                     </div>
 
@@ -92,11 +94,11 @@
                                 <tr><td><strong>Mileage</strong></td><td>{{ car.mileage }} km/l</td></tr>
                                 <tr><td><strong>HP</strong></td><td>{{ car.horse_power }} HP</td></tr>
                                 <tr><td><strong>Torque</strong></td><td>{{ car.torque }} Nm</td></tr>
-                                <tr><td><strong>Brand</strong></td><td>{{ car.brand }}</td></tr>  <!-- Brand -->
-                                <tr><td><strong>Fuel Type</strong></td><td>{{ car.fuel_type }}</td></tr>  <!-- Fuel Type -->                             
+                                <!-- <tr><td><strong>Brand</strong></td><td>{{ car.brand }}</td></tr>  Brand -->
+                                <!-- <tr><td><strong>Fuel Type</strong></td><td>{{ car.fuel_type }}</td></tr>  Fuel Type                              -->
 
                             </table>
-                            <p class="text-success"><strong>₹{{ car.price }} Lakh</strong></p>
+                            <p class="text-success"><strong>₹{{ car.price_in_lakhs }} Lakh</strong></p>
                         </div>
                     </div>
                 </div>

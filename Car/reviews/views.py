@@ -126,6 +126,7 @@ def car_listing(request):
         cars = cars.filter(engine_type__icontains=fuel_filter)
     if search_query:
         cars = cars.filter(car_model__model_name__icontains=search_query)
+        cars = cars.filter(car_model__model_name__icontains=search_query)
 
     # Price filtering
     if price_filter and '-' in price_filter:
@@ -206,3 +207,4 @@ def edit_profile(request):
         return redirect('profile')
 
     return render(request, 'edit_profile.html')
+

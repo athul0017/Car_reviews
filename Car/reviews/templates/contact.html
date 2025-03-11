@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
-</head>
-<body>
+{% extends "layout_inner.html" %}
+
+{% block title %}Contact Us{% endblock %}
+
+{% block content %}
     <h2>Contact Us</h2>
     <p>Have a question? Fill out the form below and we'll get back to you.</p>
 
     <form method="post">
-        {% csrf_token %}
-        <label>Name:</label><br>
-        <input type="text" name="name" required><br><br>
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
 
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
 
-        <label>Message:</label><br>
-        <textarea name="message" required></textarea><br><br>
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" required></textarea><br><br>
 
         <button type="submit">Send Message</button>
     </form>
-</body>
-</html>
+{% endblock %}

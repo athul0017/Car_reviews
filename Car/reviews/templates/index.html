@@ -93,7 +93,7 @@
 				                    <li class="scroll"><a href="#featured-cars">featured cars</a></li>
 				                    <li class="scroll"><a href="#new-cars">new cars</a></li>
 				                    <li class="scroll"><a href="#brand">brands</a></li>
-				                    <li class="scroll"><a href="#contact">contact</a></li>
+				                    <li class="scroll"><a href="{% url 'contact' %}">contact</a></li>
 									
 
                                    <!-- Display user's name if logged in, otherwise show Login link -->
@@ -128,7 +128,7 @@
 					<p>
 						Drive smart with honest reviews, expert opinions, and the perfect car for you!
 					</p>
-					<button class="welcome-btn" onclick="window.location.href='#'">contact us</button>
+					<button class="welcome-btn" onclick="window.location.href='{% url 'contact' %}'">contact us</button>
 				</div>
 			</div>
 
@@ -323,13 +323,13 @@
 									</div>
 									<div class="col-md-5 col-sm-12">
 										<div class="new-cars-txt">
-											<h2><a href="#">{{ car.car_model }} - {{ car.variant }}</a></h2>
+											<h2><a href="{% url 'car_details' car.id %}">{{ car.car_model }} </a></h2>
 											<p>{{ car.discription|truncatewords:30 }}</p>
 											<p class="new-cars-para2">
 												Engine: {{ car.engine_type }} | Transmission: {{ car.transmission }}<br>
 												Mileage: {{ car.mileage }} km/l | Price: ₹{{ car.price_in_lakhs }} lakh
 											</p>
-											<button class="welcome-btn new-cars-btn" onclick="window.location.href='#'">
+											<button class="welcome-btn new-cars-btn" onclick="window.location.href='{% url 'car_details' car.id %}'">
 												View Details
 											</button>
 										</div><!--/.new-cars-txt-->    
@@ -382,7 +382,7 @@
                         <div class="featured-cars-txt">
                             <h2><a href="#">{{ car.car_model }}</a></h2>
                             <h3>₹{{ car.price_in_lakhs }} Lakh</h3>
-                            <p>{{ car.discription|truncatewords:20 }}</p>
+                            <p>{{ car.discription|truncatewords:50 }}</p>
                         </div>
                     </div>
                 </div>
