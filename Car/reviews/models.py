@@ -65,3 +65,9 @@ class Review(models.Model):
     class Meta:
         ordering = ['-created_at']
         
+class CarGallery(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='car_gallery_images/', help_text="Upload an image of the car", null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Now correctly sets when the object is created
+    updated_at = models.DateTimeField(auto_now=True)  # Updates automatically when the object is saved
+

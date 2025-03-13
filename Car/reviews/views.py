@@ -29,15 +29,15 @@ def compare_cars(request):
 
         # Check if exactly 2 cars are selected
         if len(selected_car_ids) != 2:
-            messages.error(request, "Please select exactly 2 cars to compare.")
-            return redirect('car_list')  # Redirect back to the car listing page
+            # messages.error(request, "Please select exactly 2 cars to compare.")
+            return redirect('car_listing')  # Redirect back to the car listing page
         
         # Validate car IDs (check if they exist in the database)
         try:
             selected_car_ids = [int(id) for id in selected_car_ids]  # Convert to integers
         except ValueError:
             messages.error(request, "Invalid car selection.")
-            return redirect('car_list')
+            return redirect('car_listing')
         
         # Retrieve the cars to compare
         cars_to_compare = Car.objects.filter(id__in=selected_car_ids)
@@ -45,16 +45,16 @@ def compare_cars(request):
         # Ensure that exactly 2 cars are returned
         if cars_to_compare.count() != 2:
             messages.error(request, "Invalid car selection or cars not found.")
-            return redirect('car_list')
+            return redirect('car_listing')
         
         # Additional check: Ensure that the selected cars are not the same
         if cars_to_compare[0].id == cars_to_compare[1].id:
             messages.error(request, "You cannot compare the same car with itself.")
-            return redirect('car_list')
+            return redirect('car_listing')
         
         return render(request, 'compare_cars.html', {'car1': cars_to_compare[0], 'car2': cars_to_compare[1]})
     
-    return redirect('car_list')
+    return redirect('car_listing')
 
 
 def login_view(request):
@@ -149,11 +149,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Avg
 from django.urls import reverse
 from django.utils.http import urlencode
-from .models import Car, Review
+from .models import Car, Review,CarGallery
 
 def car_details(request, car_id):
     car = get_object_or_404(Car, id=car_id)
     reviews = Review.objects.filter(car=car).order_by('-created_at')
+    images = CarGallery.objects.filter(car=car)  # ✅ Fetch images for the car
 
     # Calculate the average rating
     avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
@@ -176,12 +177,14 @@ def car_details(request, car_id):
             login_url = f"{reverse('login')}?{urlencode({'next': request.path})}"
             return redirect(login_url)
 
-    # ✅ Pass `avg_rating` to the template
+    # ✅ Pass `images` to the template
     return render(request, 'car_details.html', {
         'car': car,
         'reviews': reviews,
-        'avg_rating': avg_rating
+        'avg_rating': avg_rating,
+        'images': images  # ✅ Added this line
     })
+
 
 @login_required
 def profile(request):
