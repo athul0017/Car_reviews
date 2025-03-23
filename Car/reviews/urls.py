@@ -4,6 +4,7 @@ from .views import login_view, signup_view
 from django.contrib.auth import views as auth_views  # auth views
 from .views import compare_cars
 from .views import contact_page  # Import contact function
+from .views import delete_review
 
 urlpatterns = [
     path('', views.index, name='index'),  # Homepage with featured & latest cars
@@ -16,4 +17,5 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='edit_profile'),  # Edit Profile view
     path('contact/', contact_page, name='contact'),  # URL for Contact Us
     path('compare/', views.compare_cars, name='compare_cars'),
+    path('delete_review/<int:review_id>/', delete_review, name='delete_review'),
 ]    
