@@ -61,13 +61,14 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
 
     # Allow deletion only if the user is the review owner or an admin
-    if request.user == review.user or request.user.is_superuser:
+    if request.user == review.user or request.user.is_staff:
         review.delete()
         messages.success(request, "Your review has been deleted successfully.")
     else:
         messages.error(request, "You are not authorized to delete this review.")
 
-    return redirect('car_details', car_id=review.car.id)  # Redirect to the correct page
+    return redirect('car_details', car_id=review.car.id)  # Redirect to car details page
+
 
 
 def login_view(request):
