@@ -18,7 +18,6 @@ class CarModel(models.Model):
     def __str__(self):
         return f"{self.brand.bname} {self.model_name} ({self.year})"
 
-# Car Table
 class Car(models.Model):
     car_model = models.ForeignKey(CarModel, on_delete=models.CASCADE, related_name="cars", null=True, blank=False)
     variant = models.CharField(max_length=50, help_text="e.g., VXI, ZXI, ZXI+", null=True, blank=False)
@@ -26,17 +25,25 @@ class Car(models.Model):
     discription = models.TextField(null=True, blank=False)
     category = models.CharField(max_length=50, help_text="e.g., SUV, Sedan, Hatchback", null=True, blank=False)
     engine_type = models.CharField(max_length=20)
-    transmission = models.CharField(max_length=20,choices=[("Manual","Manual"),("Automatic","Automatic")] )
+    transmission = models.CharField(max_length=20, choices=[("Manual", "Manual"), ("Automatic", "Automatic")])
     mileage = models.DecimalField(max_digits=10, decimal_places=2, help_text="in km/l")
     horse_power = models.DecimalField(max_digits=10, decimal_places=2, help_text="in HP")
     torque = models.DecimalField(max_digits=10, decimal_places=2, help_text="in Nm")
     pros = models.TextField(null=True, blank=True)
     cons = models.TextField(null=True, blank=True)
     image_file = models.ImageField(upload_to='car_images/', help_text="Upload an image of the car", null=True, blank=True)
+
+    # Safety Features
+    safety_rating = models.FloatField(default=0.0, help_text="Safety rating out of 5")
+    Car_detailed_review = models.URLField(blank=True, null=True, help_text="YouTube link of crash test")
     
+
+    # **✅ Add NCAP Rating**
+    ncap_rating = models.IntegerField(default=0, help_text="NCAP safety rating out of 5")
+
     # Fixed created_at and updated_at
-    created_at = models.DateTimeField(auto_now_add=True)  # Now correctly sets when the object is created
-    updated_at = models.DateTimeField(auto_now=True)  # Updates automatically when the object is saved
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     featured = models.BooleanField(default=False, help_text="Mark as featured car")
 
@@ -50,6 +57,8 @@ class Car(models.Model):
     class Meta:
         ordering = ['car_model', 'variant']
         verbose_name_plural = "Car"
+
+
 
 # Review Model
 class Review(models.Model):
