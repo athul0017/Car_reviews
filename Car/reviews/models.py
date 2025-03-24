@@ -80,3 +80,15 @@ class CarGallery(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)  # Now correctly sets when the object is created
     updated_at = models.DateTimeField(auto_now=True)  # Updates automatically when the object is saved
 
+class MileageReport(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="mileage_reports")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mileage = models.FloatField(help_text="Enter mileage in km/l (or km/kWh for EVs)")
+    driving_condition = models.CharField(max_length=50, choices=[('City', 'City'), ('Highway', 'Highway'), ('Mixed', 'Mixed')])
+    submitted_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.car} - {self.mileage} km/l by {self.user.username}"
+
+    class Meta:
+        ordering = ['-submitted_at']

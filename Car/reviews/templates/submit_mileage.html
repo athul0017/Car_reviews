@@ -1,0 +1,42 @@
+{% extends 'layout_inner.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border border-4 border-dark rounded-3 p-4">  {# Thick Borders and Padding #}
+                <div class="card-header bg-primary text-white text-center border-bottom border-3 border-dark p-3">
+                    <h3 class="fw-bold">🚗 Submit Real-World Mileage for {{ car.car_model.brand.bname }} {{ car.car_model.model_name }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="p-3">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">{{ field.label }}</label>
+                                <div class="border border-3 border-dark p-2 rounded">  
+                                    {{ field }}
+                                </div>
+                                {% if field.help_text %}
+                                    <p class="text-muted small mt-1">{{ field.help_text }}</p>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <p class="text-danger small">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-lg px-5 py-2 fw-bold text-white bg-success border border-3 border-dark rounded-pill">
+                                🚀 Submit Mileage
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

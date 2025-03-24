@@ -7,76 +7,72 @@ from django.contrib.auth.decorators import login_required
 from django.utils.http import urlencode
 from django.urls import reverse
 from django.db.models import Avg
-from .models import Car, Brand, Review, CarGallery
-from .forms import LoginForm
+from .models import Car, Brand, Review, CarGallery, MileageReport
+from .forms import LoginForm, MileageReportForm
+
 
 def index(request):
     latest_cars = Car.objects.all().order_by('-created_at')[:3]  # Get 3 newest cars
     featured_cars = Car.objects.filter(featured=True)[:4]  # Get top 4 featured cars
     return render(request, 'index.html', {'latest_cars': latest_cars, 'featured_cars': featured_cars})
 
+
 def contact_page(request):
     return render(request, 'contact.html')  # Show contact.html page
 
-def compare_cars(request):
-    if request.method == 'GET':
-        selected_car_ids = request.GET.getlist('compare')
 
-        if len(selected_car_ids) != 2:
-            return redirect('car_listing')  # Redirect back to the car listing page
-        
-        try:
-            selected_car_ids = [int(id) for id in selected_car_ids]
-        except ValueError:
-            messages.error(request, "Invalid car selection.")
-            return redirect('car_listing')
-        
-        cars_to_compare = Car.objects.filter(id__in=selected_car_ids)
-        
-        if cars_to_compare.count() != 2:
-            messages.error(request, "Invalid car selection or cars not found.")
-            return redirect('car_listing')
-        
-        if cars_to_compare[0].id == cars_to_compare[1].id:
-            messages.error(request, "You cannot compare the same car with itself.")
-            return redirect('car_listing')
-        
-        return render(request, 'compare_cars.html', {'car1': cars_to_compare[0], 'car2': cars_to_compare[1]})
-    
-    return redirect('car_listing')
+def compare_cars(request):
+    selected_car_ids = request.GET.getlist('compare')
+
+    if len(selected_car_ids) != 2:
+        messages.error(request, "Please select exactly two cars to compare.")
+        return redirect('car_listing')
+
+    try:
+        selected_car_ids = [int(id) for id in selected_car_ids]
+    except ValueError:
+        messages.error(request, "Invalid car selection.")
+        return redirect('car_listing')
+
+    cars_to_compare = Car.objects.filter(id__in=selected_car_ids)
+
+    if cars_to_compare.count() != 2 or cars_to_compare[0].id == cars_to_compare[1].id:
+        messages.error(request, "Invalid car selection. Please select two different cars.")
+        return redirect('car_listing')
+
+    return render(request, 'compare_cars.html', {'car1': cars_to_compare[0], 'car2': cars_to_compare[1]})
+
 
 @login_required
 def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-
-    if request.user == review.user or request.user.is_staff:
+    if request.user == review.user:  # Ensure user can only delete their own review
         review.delete()
+        messages.get_messages(request)  # Clears previous messages
         messages.success(request, "Your review has been deleted successfully.")
-    else:
-        messages.error(request, "You are not authorized to delete this review.")
-
     return redirect('car_details', car_id=review.car.id)
+
 
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('index')
-    
-    next_url = request.GET.get('next', 'index')  
+
+    next_url = request.GET.get('next', 'index')
+
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user:
                 login(request, user)
                 return redirect(next_url)
-            else:
-                return render(request, 'login.html', {'form': form, 'error_message': 'Invalid credentials'})
+            messages.error(request, 'Invalid credentials')
+
     else:
         form = LoginForm()
-    
+
     return render(request, 'login.html', {'form': form, 'next': next_url})
+
 
 def signup_view(request):
     if request.user.is_authenticated:
@@ -89,19 +85,20 @@ def signup_view(request):
         confirm_password = request.POST.get('confirm_password', '')
 
         if User.objects.filter(username=username).exists():
-            return render(request, 'signup.html', {'error_message': 'Username already taken'})
+            messages.error(request, 'Username already taken')
         elif User.objects.filter(email=email).exists():
-            return render(request, 'signup.html', {'error_message': 'Email already registered'})
+            messages.error(request, 'Email already registered')
         elif password != confirm_password:
-            return render(request, 'signup.html', {'error_message': 'Passwords do not match'})
+            messages.error(request, 'Passwords do not match')
         elif len(password) < 8:
-            return render(request, 'signup.html', {'error_message': 'Password must be at least 8 characters long'})
+            messages.error(request, 'Password must be at least 8 characters long')
         else:
             user = User.objects.create_user(username=username, email=email, password=password)
             login(request, user)
             return redirect('index')
 
     return render(request, 'signup.html')
+
 
 def car_listing(request):
     cars = Car.objects.all().order_by('-created_at')
@@ -125,70 +122,113 @@ def car_listing(request):
     if price_filter and '-' in price_filter:
         try:
             min_price, max_price = price_filter.split('-')
-            min_price = int(min_price) * 100000
-            max_price = int(max_price.replace('L', '')) * 100000
+            min_price, max_price = int(min_price) * 100000, int(max_price.replace('L', '')) * 100000
             cars = cars.filter(price__gte=min_price, price__lte=max_price)
         except ValueError:
             pass
 
     paginator = Paginator(cars, 6)
-    page_number = request.GET.get('page')
-    cars_page = paginator.get_page(page_number)
+    cars_page = paginator.get_page(request.GET.get('page'))
 
     return render(request, 'car_listing.html', {'cars': cars_page, 'brands': brands})
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from django.http import HttpResponseRedirect
+from django.db.models import Avg
+from urllib.parse import urlencode
+from .models import Car, Review, CarGallery, MileageReport
+from .forms import MileageReportForm
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
+from urllib.parse import urlencode
+from django.urls import reverse
+from .models import Car, Review, CarGallery, MileageReport
+from .forms import MileageReportForm
 
 def car_details(request, car_id):
     car = get_object_or_404(Car, id=car_id)
     reviews = Review.objects.filter(car=car).order_by('-created_at')
     images = CarGallery.objects.filter(car=car)
+    mileage_reports = MileageReport.objects.filter(car=car)
 
-    avg_rating = reviews.aggregate(Avg('rating'))['rating__avg']
-    avg_rating = round(avg_rating, 1) if avg_rating else 0
+    avg_rating = round(reviews.aggregate(Avg('rating'))['rating__avg'] or 0, 1)
+    avg_mileage = round(mileage_reports.aggregate(Avg('mileage'))['mileage__avg'] or 0, 2) if mileage_reports else "Not reported yet"
+
+    mileage_form = MileageReportForm()
 
     if request.method == "POST":
-        if request.user.is_authenticated:
-            review_rating = request.POST.get("review_rating")
-            review_text = request.POST.get("review_text")
+        print("POST Data:", request.POST)  # Debugging statement
 
-            if review_rating and review_text:
-                Review.objects.create(
-                    car=car,
-                    user=request.user,
-                    rating=int(review_rating),
-                    review_text=review_text
-                )
-                return redirect('car_details', car_id=car.id)
+        if request.user.is_authenticated:
+            if 'review_submit' in request.POST:
+                review_rating = request.POST.get("review_rating")
+                review_text = request.POST.get("review_text")
+
+                if review_rating and review_text:
+                    new_review = Review.objects.create(
+                        car=car, user=request.user, rating=int(review_rating), review_text=review_text
+                    )
+                    print("Review Saved:", new_review)  # Debugging statement
+                    return redirect('car_details', car_id=car.id)
+
+            elif 'mileage_submit' in request.POST:
+                mileage_form = MileageReportForm(request.POST)
+                if mileage_form.is_valid():
+                    mileage_report = mileage_form.save(commit=False)
+                    mileage_report.car = car
+                    mileage_report.user = request.user
+                    mileage_report.save()
+                    print("Mileage Saved:", mileage_report)  # Debugging statement
+                    return redirect('car_details', car_id=car.id)
+
         else:
-            login_url = f"{reverse('login')}?{urlencode({'next': request.path})}"
-            return redirect(login_url)
+            return redirect(f"{reverse('login')}?{urlencode({'next': request.path})}")
 
     return render(request, 'car_details.html', {
-        'car': car,
-        'reviews': reviews,
-        'avg_rating': avg_rating,
-        'images': images,
-        'ncap_rating': car.ncap_rating,  # ✅ Fixed AttributeError
+        'car': car, 'reviews': reviews, 'avg_rating': avg_rating,
+        'images': images, 'mileage_reports': mileage_reports,
+        'avg_mileage': avg_mileage, 'mileage_form': mileage_form,
     })
+
+
+
+@login_required
+def submit_mileage(request, car_id):
+    car = get_object_or_404(Car, id=car_id)
+    form = MileageReportForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        mileage_report = form.save(commit=False)
+        mileage_report.car, mileage_report.user = car, request.user
+        mileage_report.save()
+        return redirect('car_details', car_id=car.id)
+
+    return render(request, 'submit_mileage.html', {'form': form, 'car': car})
+
 
 @login_required
 def profile(request):
     return render(request, 'profile.html', {'user': request.user})
 
+
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
         user = request.user
-        username = request.POST.get('username', user.username).strip()
-        email = request.POST.get('email', user.email).strip()
+        username, email = request.POST.get('username', user.username).strip(), request.POST.get('email', user.email).strip()
 
         if User.objects.exclude(id=user.id).filter(username=username).exists():
-            return render(request, 'edit_profile.html', {'error_message': 'Username already taken'})
-        if User.objects.exclude(id=user.id).filter(email=email).exists():
-            return render(request, 'edit_profile.html', {'error_message': 'Email already registered'})
-
-        user.username = username
-        user.email = email
-        user.save()
-        return redirect('profile')
+            messages.error(request, 'Username already taken')
+        elif User.objects.exclude(id=user.id).filter(email=email).exists():
+            messages.error(request, 'Email already registered')
+        else:
+            user.username, user.email = username, email
+            user.save()
+            return redirect('profile')
 
     return render(request, 'edit_profile.html')
+
