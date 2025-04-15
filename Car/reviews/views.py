@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -17,8 +18,17 @@ def index(request):
     return render(request, 'index.html', {'latest_cars': latest_cars, 'featured_cars': featured_cars})
 
 
+@login_required(login_url='/login/')  # Redirects to login page if user not logged in
 def contact_page(request):
-    return render(request, 'contact.html')  # Show contact.html page
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        # For now — just display a thank you message
+        return HttpResponse(f"Thank you {name}! We have received your message.")
+
+    return render(request, 'contact.html')
 
 
 def compare_cars(request):
