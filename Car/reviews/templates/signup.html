@@ -1,104 +1,154 @@
-<!-- templates/signup.html -->
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
-    <link rel="stylesheet" href="{% static 'assets/css/signup.css' %}">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: url('{% static "assets/images/login/background.jpg" %}') no-repeat center center fixed;
-            background-size: cover;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.6);
-            width: 350px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        .container h2 {
-            margin-bottom: 20px;
-            color: #f8f9fa;
-            font-weight: bold;
-        }
-        .container form {
-            display: flex;
-            flex-direction: column;
-        }
-        .container input[type="text"],
-        .container input[type="email"],
-        .container input[type="password"] {
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        .container input::placeholder {
-            color: #ddd;
-        }
-        .container button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .container button:hover {
-            background-color: #0056b3;
-        }
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
-        .login-link {
-            margin-top: 15px;
-            color: white;
-        }
-        .login-link a {
-            color: #00aaff;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Signup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background-color: #d8f3dc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 900px;
+      display: flex;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .left {
+      flex: 1;
+      background-color: #f6fff8;
+      padding: 40px 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .left h2 {
+      color: #2d6a4f;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .left form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .left input {
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #cce3de;
+      border-radius: 8px;
+      background-color: #f0fdf4;
+    }
+
+    .left input::placeholder {
+      color: #6c757d;
+    }
+
+    .left button {
+      margin-top: 15px;
+      background-color: #2d6a4f;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+
+    .left button:hover {
+      background-color: #1b4332;
+    }
+
+    .left .login-link {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .left .login-link a {
+      color: #1b4332;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .left .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .right {
+      flex: 1;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .right img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        height: 100%;
+        width: 95%;
+      }
+
+      .right {
+        height: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Signup</h2>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
-            <button type="submit">Signup</button>
-            {% if error_message %}
-                <p class="error-message">{{ error_message }}</p>
-            {% endif %}
-            <p class="login-link">Already have an account? <a href="{% url 'login' %}">Login</a></p>
-        </form>
+  <div class="container">
+    <div class="left">
+      <h2>Sign Up</h2>
+      <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        <button type="submit">Create Account</button>
+        {% if error_message %}
+          <p class="error-message">{{ error_message }}</p>
+        {% endif %}
+        <p class="login-link">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+      </form>
     </div>
+    <div class="right">
+      <img src="{% static 'assets/images/login/carsignup.png' %}" alt="Car Image">
+    </div>
+  </div>
 </body>
 </html>
